@@ -1,0 +1,174 @@
+---
+title: "CLEANING DATA IN R WITH DATACAMP"
+author: "amit gupta"
+date: "23 September 2017"
+output: html_document
+---
+
+
+```{r}
+install.packages("tidyr")
+install.packages("lubridate")
+install.packages("stringr")
+```
+
+
+
+PROCESS INVOLVE IN REPORTING ARE COLLECTION-->CLEAN-->ANALYSIS-->REPORT<br />
+WITHOUT CLEANING WE CANT ANALYSIS<br />
+75% of data scientist work is to clean data <br />
+WHEN WE SAY DATA CLEANING WHICH MEANS WE HAVE TO CLEAN DIRTY DATA <br />
+DIRTY DATA MEANS DATA WITH NON ORGANISED MANNER AND WITH MOST OF THE NA VALUES <br />
+
+
+CLEANING PROCESS INVOLVES--------<br />
+1)EXPLORING RAW DATA <br />
+2)TIDYING  DATA <br />
+3)PREPARING DATA FOR ANALYSIS<br />
+
+
+
+*EXPLORING RAW DATA- <br />
++UNDERSTANDING THE STRUCTURE OF YOUR DATA <br />
++LOOK AT THE DATA <br />
++VISUALIZE YOUR DATA  
+```{r }
+#**UNDERSTANDING THE STRUCTURE OF YOUR DATA** 
+#load the data
+dat<-read.csv("file:///C:/Users/Administrator/Desktop/data science/hackathon/dataset.csv")
+
+#view classs of data object
+class(dat)
+
+#view dimention of data
+dim(dat)
+
+#look at the column names 
+names(dat)
+
+#preview of data with helpful details (rows are observation and columns are variables or attributes )
+str(dat)
+
+
+#better version of r using glimpse() , in dplyr way 
+library(dplyr)
+glimpse(dat)
+
+#Another useful function is summary to understand the data 
+summary(dat)
+
+#**LOOK AT THE DATA**
+
+#view the top 
+head(dat,10)
+
+#view the bottom
+tail(dat,7)
+
+
+#**visualize your data
+#view histogram for single variable (univariant)
+hist(dat$budget)
+#view plot of two variable
+plot(dat$year,dat$budget)
+
+```
+
+
+**2)TIDYING  DATA**
+```{r}
+#datasets are combo of rows(observation) and column (variable) ,but we cant call each rows and column as observation and variable.
+#suppose we have a dataset of column name,age,eye_color,height , here name(person) is observation and all the columns are variable bcoz all the variable/attributes contain contain unique values 
+#But taking same example if we had columns like name,age,blue,green,red,height where blue,green and red are values for eye_colors can not be consider as variable but values and observation in this dataset will be name(person)
+
+#To address the above matter tidying of data is done using TIDYR package 
+
+
+
+#some of the imp functions in tidyr
+#gather() gather columns in to key value pairs
+#spread() spread key value pairs into columns
+#seprate one column into multiple
+#unite() multiple column in to one.
+
+library(tidyr)
+head(dat)
+
+glimpse(dat)
+
+dat1=read.csv("file:///D:/dataset/oj.csv")
+
+
+
+#gather 
+#gather()
+
+
+#spread 
+#spread()
+
+
+#seprate columns 
+dat1<-separate(dat1,logmove,c("whole_num","decimal")) #seprate(dataset,name of the column to be seprated,names of new 2 columns in a vector c("",""))
+
+
+#unite columns (opposite of seprate)
+dat1<-unite(dat1,logmove,whole_num,decimal)
+print(dat1)
+
+#Addressing common symptoms of messy data(untidy data)
+
+
+```
+
+
+#**Preparing data for analysis
+```{r}
+#DATE MANUPLATION converting str to date using lubridate package 
+library(lubridate)
+#experiment with basic lubridate functions 
+ymd("2005-08-15") #lubridate functions always convert date into 
+
+ymd("2005 august 25")
+
+mdy("august 25,2015")
+
+dmy("19 april 2016")
+
+hms("13:33:26")
+
+ymd_hms("2005-08-15 13:33:26")
+
+#string manuplation using STRINGR package
+#str_trim
+library(stringr)
+#trim leading and trailing white spaces  
+str_trim("     this string has extra spaces in start and end  ")
+#sting pads with additional char 
+str_pad("amit",width=7,side="left",pad="0")
+#string detect--- to detect a parten in a string 
+friends<-c("amit","akash","bava")
+str_detect(friends,"akash")
+#repling--find and replace a pattern
+str_replace(friends,"akash","dharmik")
+#to convert the string in lower 
+tolower("helloWORLD")
+#to convert the string in to upper character 
+toupper("helloWORLD")
+
+#missing values and special values 
+
+
+```
+
+#how to find Null values in a data frame (eda unit 3 univarIANT )
+
+```{r}
+library(ggplot2)
+dat<-read.csv("file:///C:/Users/Administrator/Desktop/data science/hackathon/dataset.csv")
+colSums(is.na(dat)) #to find NA PRESENT INA DATASET
+
+title<-as.data.frame(table(dat$title))
+ggplot(aes(x=var1,y=freq)) + geom_bar(stat="identity")# + coord_flip() +labs(x='player NAME')
+``` 
+
